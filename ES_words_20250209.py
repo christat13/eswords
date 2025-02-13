@@ -7,6 +7,7 @@ import ipywidgets as widgets
 from IPython.display import display
 from ipywidgets import interact_manual
 import streamlit as st
+import plotly.graph_objects as go
 
 # 📂 Folder containing CSV files
 folder_path = "data"
@@ -51,18 +52,33 @@ def plot_word_popularity(word):
     df_word = df_all[df_all['word'].str.lower() == word.lower()]  # Case-insensitive match
     
     if not df_word.empty:
-        # 🛠️ Fix 1: Aggregate counts to avoid duplicate points
+        # 🛠️ Aggregate counts to remove duplicate points
         df_word = df_word.groupby('date', as_index=False)['count'].sum()
 
-        # 🛠️ Fix 2: Sort by date to ensure correct plotting
+        # 🛠️ Ensure dates are sorted properly
         df_word = df_word.sort_values(by="date")
 
-        # 🎨 Plot with proper markers and sorting
+        # 📈 Create the main line chart
         fig = px.line(df_word, x='date', y='count', 
-                      title=f'📈 Popularity of "{word}" Over Time', 
+                      title=f'📊 Popularity of "{word}" Over Time', 
                       markers=True)
 
-        st.plotly_chart(fig)  # ✅ Streamlit-friendly graph display
+        # 🔹 Add a dashed trend line (7-day moving average)
+        df_word['trend'] = df_word['count'].rolling(window=7, min_periods=1).mean()
+
+        fig.add_trace(
+            go.Scatter(
+                x=df_word['date'], 
+                y=df_word['trend'], 
+                mode='lines', 
+                name="Trend (7-day Avg)", 
+                line=dict(dash='dash', color='red', width=2)  # Dashed red line
+            )
+        )
+
+        # 🎯 Show the updated plot in Streamlit
+        st.plotly_chart(fig)
+
     else:
         st.warning(f"❌ The word '{word}' was not found in the dataset.")
 
