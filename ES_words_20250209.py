@@ -83,7 +83,7 @@ def plot_word_popularity(word):
 # 🎨 Streamlit UI
 st.title("📊 Word Popularity Over Time")
 
-word = st.text_input("🔍 Enter a word to track:")
+word = st.text_input("🔍 Enter a word to view results:")
 
 if word:
     plot_word_popularity(word)
