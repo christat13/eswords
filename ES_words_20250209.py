@@ -92,20 +92,29 @@ if word:
 
 # Show a summary table
 # Compute the Most Popular Words Summary
-popular_words = df_all.groupby("word").agg(
-    total_count=("count", "sum"),
-    days_mentioned=("date", "nunique")  # Number of unique days the word appeared
-).reset_index()
+if not df_all.empty:
+    st.subheader("📈 Most Popular Words Summary")
 
-# Sort by total count (descending order)
-popular_words = popular_words.sort_values(by="total_count", ascending=False)
+    # 🛠️ Ensure 'date' column is properly formatted as datetime
+    df_all["date"] = pd.to_datetime(df_all["date"], errors="coerce")
 
-# Limit to top 20 words
-top_20_words = popular_words.head(20)
+    # 🏆 Group by word and compute total occurrences & unique days mentioned
+    popular_words = df_all.groupby("word").agg(
+        total_count=("count", "sum"),       # Total occurrences of the word
+        days_mentioned=("date", "nunique")  # Number of unique DAYS it appeared
+    ).reset_index()
 
-# Display in Streamlit
-st.subheader("📈 Most Popular Words Summary")
-st.write(top_20_words)
+    # 🎯 Sort by total count (highest to lowest)
+    popular_words = popular_words.sort_values(by="total_count", ascending=False)
+
+    # 📌 Show only the top 20 words
+    top_20_words = popular_words.head(20)
+
+    # 📊 Display the table in Streamlit
+    st.write(top_20_words)
+else:
+    st.warning("No data available to display.")
+
 
 
 
