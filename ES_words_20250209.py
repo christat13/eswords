@@ -94,6 +94,9 @@ if word:
 # Show a summary table
 # Compute the Most Popular Words Summary
 
+import streamlit as st
+import pandas as pd
+
 if not df_all.empty:
     st.subheader("📈 Most Popular Words Summary (Last 3 Months + Total)")
 
@@ -136,13 +139,14 @@ if not df_all.empty:
         styles = """
         <style>
             table {width: 100%; border-collapse: collapse;}
-            th {background-color: #1f77b4; color: white; padding: 10px;}
+            th {background-color: #1f77b4; color: white; padding: 10px; text-align: center;}
             td {padding: 8px; border: 1px solid #ddd; text-align: center;}
             tr:nth-child(even) {background-color: #E3F2FD;}
-            .word-column {background-color: #1f77b4; color: white; font-weight: bold;}
+            .word-column {background-color: #1f77b4; color: white; font-weight: bold; text-align: left;}
         </style>
         """
         
+        # Convert DataFrame to HTML
         html = df.to_html(index=False, escape=False)
 
         # Apply "word-column" class to the first column (word column)
