@@ -94,32 +94,44 @@ if word:
 # Show a summary table
 # Compute the Most Popular Words Summary
 if not df_all.empty:
-    st.subheader("📈 Most Popular Words Summary")
+    st.subheader("📈 Most Popular Words Summary (Last 3 Months)")
 
-    # 🛠️ Ensure 'date' column is in datetime format (even if monthly)
+    # 🛠️ Ensure 'date' column is in datetime format
     df_all["date"] = pd.to_datetime(df_all["date"], errors="coerce")
 
-    # 🏆 Group by word and compute total occurrences & unique months mentioned
-    popular_words = df_all.groupby("word").agg(
-        total_count=("count", "sum"),          # Total occurrences of the word
-        months_mentioned=("date", "nunique")   # Number of unique MONTHS it appeared
-    ).reset_index()
+    # 🎯 Find the latest date in the dataset
+    latest_date = df_all["date"].max()
 
-    # 🎯 Sort by total occurrences (highest to lowest)
-    popular_words = popular_words.sort_values(by="total_count", ascending=False)
+    # 📆 Determine the three most recent months
+    three_months_ago = latest_date - pd.DateOffset(months=3)
+
+    # 📌 Filter data to keep only the last 3 months
+    df_recent = df_all[df_all["date"] >= three_months_ago]
+
+    # 🏆 Aggregate total counts for each word in the last 3 months
+    recent_counts = df_recent.pivot_table(
+        index="word",
+        columns=df_recent["date"].dt.to_period("M"),  # Group by month
+        values="count",
+        aggfunc="sum",
+        fill_value=0  # Fill missing months with 0 count
+    )
+
+    # 🎯 Sort by total occurrences in the most recent month
+    recent_counts["total"] = recent_counts.sum(axis=1)  # Compute total count
+    recent_counts = recent_counts.sort_values(by="total", ascending=False)
+    recent_counts = recent_counts.drop(columns=["total"])  # Remove total column
 
     # 📌 Show only the top 20 words
-    top_20_words = popular_words.head(20)
+    top_20_recent = recent_counts.head(20)
 
-    # 📊 Display the table in Streamlit
-    st.write(top_20_words)
-
-    # Debugging: Print unique month counts
-    st.write("🔍 Debug: Unique month counts per word")
-    st.write(popular_words[["word", "months_mentioned"]])
-
+    # 📊 Display in Streamlit
+    st.write(top_20_recent)
+    
 else:
     st.warning("No data available to display.")
+
+
 
 
 
