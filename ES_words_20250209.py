@@ -94,9 +94,6 @@ if word:
 # Show a summary table
 # Compute the Most Popular Words Summary
 
-import streamlit as st
-import pandas as pd
-
 if not df_all.empty:
     st.subheader("📈 Most Popular Words Summary (Last 3 Months + Total)")
 
@@ -131,31 +128,14 @@ if not df_all.empty:
     # 📌 Show only the top 20 words
     top_20_recent = recent_counts.head(20)
 
-    # 🔹 Reset index to bring "word" back as a column
-    top_20_recent = top_20_recent.reset_index()
+    # 🎨 Apply color gradient to ALL values
+    styled_df = top_20_recent.style \
+        .format("{:,}") \
+        .background_gradient(cmap="coolwarm", axis=1)  # 🔥 Full gradient color map
 
-    # 🎨 Convert DataFrame to an HTML-styled Table
-    def df_to_html(df):
-        styles = """
-        <style>
-            table {width: 100%; border-collapse: collapse;}
-            th {background-color: #1f77b4; color: white; padding: 10px; text-align: center;}
-            td {padding: 8px; border: 1px solid #ddd; text-align: center;}
-            tr:nth-child(even) {background-color: #E3F2FD;}
-            .word-column {background-color: #1f77b4; color: white; font-weight: bold; text-align: left;}
-        </style>
-        """
-        
-        # Convert DataFrame to HTML
-        html = df.to_html(index=False, escape=False)
-
-        # Apply "word-column" class to the first column (word column)
-        html = html.replace('<td>', '<td class="word-column">', 1)  # Style only the first column
-        
-        return styles + html
-
-    # 📊 Display in Streamlit using HTML
-    st.markdown(df_to_html(top_20_recent), unsafe_allow_html=True)
+    # 📊 Display in Streamlit
+    st.dataframe(styled_df)
 
 else:
     st.warning("No data available to display.")
+
