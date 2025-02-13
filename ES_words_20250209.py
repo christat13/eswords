@@ -94,7 +94,6 @@ if word:
 # Show a summary table
 # Compute the Most Popular Words Summary
 
-
 if not df_all.empty:
     st.subheader("📈 Most Popular Words Summary (Last 3 Months + Total)")
 
@@ -132,35 +131,27 @@ if not df_all.empty:
     # 🔹 Reset index to bring "word" back as a column
     top_20_recent = top_20_recent.reset_index()
 
-    # 🎨 Custom Styling Function
-    def custom_style(styler):
-        styler.set_properties(**{
-            'background-color': '#E3F2FD',  # Light blue background for all cells
-            'color': '#000000',  # Black text for contrast
-            'border-color': '#DDDDDD'  # Light border
-        })
+    # 🎨 Convert DataFrame to an HTML-styled Table
+    def df_to_html(df):
+        styles = """
+        <style>
+            table {width: 100%; border-collapse: collapse;}
+            th {background-color: #1f77b4; color: white; padding: 10px;}
+            td {padding: 8px; border: 1px solid #ddd; text-align: center;}
+            tr:nth-child(even) {background-color: #E3F2FD;}
+            .word-column {background-color: #1f77b4; color: white; font-weight: bold;}
+        </style>
+        """
+        
+        html = df.to_html(index=False, escape=False)
 
-        # Apply a blue color to the "word" column
-        styler.applymap(lambda _: 'background-color: #1f77b4; color: white;', subset=['word'])
+        # Apply "word-column" class to the first column (word column)
+        html = html.replace('<td>', '<td class="word-column">', 1)  # Style only the first column
+        
+        return styles + html
 
-        # Apply a blue header color for month columns and total
-        header_cols = top_20_recent.columns.tolist()
-        styler.applymap(lambda _: 'background-color: #1f77b4; color: white;', subset=header_cols)
-
-        return styler
-
-    # 📊 Apply Styling
-    styled_df = top_20_recent.style \
-        .format("{:,}") \
-        .pipe(custom_style)
-
-    # 🚀 Fix: Use `st.write(styled_df)` instead of `st.dataframe()`
-    st.write(styled_df)
+    # 📊 Display in Streamlit using HTML
+    st.markdown(df_to_html(top_20_recent), unsafe_allow_html=True)
 
 else:
     st.warning("No data available to display.")
-
-
-
- 
-
