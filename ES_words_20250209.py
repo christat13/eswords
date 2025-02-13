@@ -49,11 +49,20 @@ df_all = pd.concat(data, ignore_index=True) if data else pd.DataFrame()
 # Function to plot word popularity
 def plot_word_popularity(word):
     df_word = df_all[df_all['word'].str.lower() == word.lower()]  # Case-insensitive match
+    
     if not df_word.empty:
+        # 🛠️ Fix 1: Aggregate counts to avoid duplicate points
+        df_word = df_word.groupby('date', as_index=False)['count'].sum()
+
+        # 🛠️ Fix 2: Sort by date to ensure correct plotting
+        df_word = df_word.sort_values(by="date")
+
+        # 🎨 Plot with proper markers and sorting
         fig = px.line(df_word, x='date', y='count', 
-                      title=f'Popularity of "{word}" Over Time', 
+                      title=f'📈 Popularity of "{word}" Over Time', 
                       markers=True)
-        st.plotly_chart(fig)  # ✅ Streamlit-friendly way to show graphs
+
+        st.plotly_chart(fig)  # ✅ Streamlit-friendly graph display
     else:
         st.warning(f"❌ The word '{word}' was not found in the dataset.")
 
