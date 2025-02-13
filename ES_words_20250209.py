@@ -91,10 +91,29 @@ if word:
     plot_word_popularity(word)
 
 # Show a summary table
-if not df_all.empty:
+# Compute the Most Popular Words Summary
+popular_words = df_all.groupby("word").agg(
+    total_count=("count", "sum"),
+    days_mentioned=("date", "nunique")  # Number of unique days the word appeared
+).reset_index()
+
+# Sort by total count (descending order)
+popular_words = popular_words.sort_values(by="total_count", ascending=False)
+
+# Limit to top 20 words
+top_20_words = popular_words.head(20)
+
+# Display in Streamlit
+st.subheader("📈 Most Popular Words Summary")
+st.write(top_20_words)
+
+
+
+'''if not df_all.empty:
     st.subheader("📈 Most Popular Words Summary")
     popular_words = df_all.groupby("word")["count"].sum().reset_index()
     popular_words = popular_words.sort_values(by="count", ascending=False)
     
     st.write(popular_words)  # ✅ Use st.write() instead of print()
+    '''
 
