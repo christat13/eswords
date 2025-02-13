@@ -93,8 +93,9 @@ if word:
 #-------------------------------------
 # Show a summary table
 # Compute the Most Popular Words Summary
+
 if not df_all.empty:
-    st.subheader("📈 Most Popular Words Summary (Last 3 Months)")
+    st.subheader("📈 Most Popular Words Summary (Last 3 Months + Total)")
 
     # 🛠️ Ensure 'date' column is in datetime format
     df_all["date"] = pd.to_datetime(df_all["date"], errors="coerce")
@@ -117,18 +118,19 @@ if not df_all.empty:
         fill_value=0  # Fill missing months with 0 count
     )
 
-    # 🎯 Sort by total occurrences in the most recent month
-    recent_counts["total"] = recent_counts.sum(axis=1)  # Compute total count
-    recent_counts = recent_counts.sort_values(by="total", ascending=False)
-    recent_counts = recent_counts.drop(columns=["total"])  # Remove total column
+    # 🔢 Add a "Total" column summing **ALL MONTHS** from the full dataset
+    total_counts = df_all.groupby("word")["count"].sum()
+    recent_counts["Total"] = total_counts
+
+    # 🎯 Sort by the total count across all months
+    recent_counts = recent_counts.sort_values(by="Total", ascending=False)
 
     # 📌 Show only the top 20 words
     top_20_recent = recent_counts.head(20)
 
     # 📊 Display in Streamlit
     st.write(top_20_recent)
-    
+
 else:
     st.warning("No data available to display.")
-
 
