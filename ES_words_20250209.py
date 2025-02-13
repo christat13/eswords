@@ -129,9 +129,11 @@ if not df_all.empty:
     # 📌 Show only the top 20 words
     top_20_recent = recent_counts.head(20)
 
+    # 🔹 Fix: Reset index to bring "word" back as a column
+    top_20_recent = top_20_recent.reset_index()
+
     # 🎨 Custom Styling Function
     def custom_style(styler):
-        # Set styles for the whole dataframe
         styler.set_properties(**{
             'background-color': '#E3F2FD',  # Light blue background for all cells
             'color': '#000000',  # Black text for contrast
@@ -139,11 +141,11 @@ if not df_all.empty:
         })
 
         # Apply a blue color to the "word" column
-        styler.applymap(lambda _: 'background-color: #1f77b4; color: white;', subset=pd.IndexSlice[:, ['word']])
+        styler.applymap(lambda _: 'background-color: #1f77b4; color: white;', subset=['word'])
 
         # Apply a blue header color for month columns and total
         header_cols = top_20_recent.columns.tolist()
-        styler.applymap(lambda _: 'background-color: #1f77b4; color: white;', subset=pd.IndexSlice[:, header_cols])
+        styler.applymap(lambda _: 'background-color: #1f77b4; color: white;', subset=header_cols)
 
         return styler
 
@@ -156,6 +158,7 @@ if not df_all.empty:
 
 else:
     st.warning("No data available to display.")
+
 
  
 
