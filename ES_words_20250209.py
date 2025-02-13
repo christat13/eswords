@@ -134,12 +134,12 @@ if not df_all.empty:
 
     # ✅ Fix: Remove `.style` and use `st.dataframe()`
     # ✅ Apply formatting ONLY to numeric columns
-st.dataframe(
-    top_20_recent.style.format({
-        "Total": "{:,}",  # Apply comma formatting to Total column
-        **{col: "{:,}" for col in top_20_recent.columns if col not in ["word"]}
-    })
-)
+    st.dataframe(
+        top_20_recent.style.format({
+            "Total": "{:,}",  # Apply comma formatting to Total column
+            **{col: "{:,}" for col in top_20_recent.columns if col not in ["word"]}
+        })
+    )
 
 
 else:
