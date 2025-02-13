@@ -133,7 +133,14 @@ if not df_all.empty:
     top_20_recent = top_20_recent.reset_index()
 
     # ✅ Fix: Remove `.style` and use `st.dataframe()`
-    st.dataframe(top_20_recent.style.format("{:,}"))
+    # ✅ Apply formatting ONLY to numeric columns
+st.dataframe(
+    top_20_recent.style.format({
+        "Total": "{:,}",  # Apply comma formatting to Total column
+        **{col: "{:,}" for col in top_20_recent.columns if col not in ["word"]}
+    })
+)
+
 
 else:
     st.warning("No data available to display.")
