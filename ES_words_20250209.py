@@ -93,6 +93,10 @@ if word:
 #-------------------------------------
 # Show a summary table
 # Compute the Most Popular Words Summary
+
+import streamlit as st
+import pandas as pd
+
 if not df_all.empty:
     st.subheader("📈 Most Popular Words Summary (Last 3 Months + Total)")
 
@@ -127,15 +131,12 @@ if not df_all.empty:
     # 📌 Show only the top 20 words
     top_20_recent = recent_counts.head(20)
 
-    # 🎨 Apply color gradient formatting
-    def highlight_max(s):
-        return ['background-color: #FFDDC1' if v == s.max() else '' for v in s]
-
+    # 🎨 Apply color gradient to ALL values
     styled_df = top_20_recent.style \
         .format("{:,}") \
-        .apply(highlight_max, subset=pd.IndexSlice[:, top_20_recent.columns])
+        .background_gradient(cmap="coolwarm", axis=1)  # 🔥 Full gradient color map
 
-    # 📊 Display in Streamlit with color formatting
+    # 📊 Display in Streamlit
     st.dataframe(styled_df)
 
 else:
