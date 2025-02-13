@@ -90,21 +90,22 @@ word = st.text_input("🔍 Enter a word to track:")
 if word:
     plot_word_popularity(word)
 
+#-------------------------------------
 # Show a summary table
 # Compute the Most Popular Words Summary
 if not df_all.empty:
     st.subheader("📈 Most Popular Words Summary")
 
-    # 🛠️ Ensure 'date' column is properly formatted as datetime
+    # 🛠️ Ensure 'date' column is in datetime format (even if monthly)
     df_all["date"] = pd.to_datetime(df_all["date"], errors="coerce")
 
-    # 🏆 Group by word and compute total occurrences & unique days mentioned
+    # 🏆 Group by word and compute total occurrences & unique months mentioned
     popular_words = df_all.groupby("word").agg(
-        total_count=("count", "sum"),       # Total occurrences of the word
-        days_mentioned=("date", "nunique")  # Number of unique DAYS it appeared
+        total_count=("count", "sum"),          # Total occurrences of the word
+        months_mentioned=("date", "nunique")   # Number of unique MONTHS it appeared
     ).reset_index()
 
-    # 🎯 Sort by total count (highest to lowest)
+    # 🎯 Sort by total occurrences (highest to lowest)
     popular_words = popular_words.sort_values(by="total_count", ascending=False)
 
     # 📌 Show only the top 20 words
@@ -112,8 +113,14 @@ if not df_all.empty:
 
     # 📊 Display the table in Streamlit
     st.write(top_20_words)
+
+    # Debugging: Print unique month counts
+    st.write("🔍 Debug: Unique month counts per word")
+    st.write(popular_words[["word", "months_mentioned"]])
+
 else:
     st.warning("No data available to display.")
+
 
 
 
