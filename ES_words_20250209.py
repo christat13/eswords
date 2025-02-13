@@ -41,8 +41,6 @@ for file in os.listdir(folder_path):
 # Check if any data was loaded
 if not data:
     st.error("❌ No valid data was loaded. Please check your CSV files.")
-else:
-    st.success(f"✅ Successfully loaded {files_loaded} CSV files.")
 
 # Combine all dataframes
 df_all = pd.concat(data, ignore_index=True) if data else pd.DataFrame()
