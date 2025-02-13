@@ -132,16 +132,3 @@ else:
     st.warning("No data available to display.")
 
 
-
-
-
-
-
-'''if not df_all.empty:
-    st.subheader("📈 Most Popular Words Summary")
-    popular_words = df_all.groupby("word")["count"].sum().reset_index()
-    popular_words = popular_words.sort_values(by="count", ascending=False)
-    
-    st.write(popular_words)  # ✅ Use st.write() instead of print()
-    '''
-
