@@ -129,7 +129,7 @@ if not df_all.empty:
     # 📌 Show only the top 20 words
     top_20_recent = recent_counts.head(20)
 
-    # 🔹 Fix: Reset index to bring "word" back as a column
+    # 🔹 Reset index to bring "word" back as a column
     top_20_recent = top_20_recent.reset_index()
 
     # 🎨 Custom Styling Function
@@ -149,15 +149,17 @@ if not df_all.empty:
 
         return styler
 
-    # 📊 Apply Styling and Display
+    # 📊 Apply Styling
     styled_df = top_20_recent.style \
         .format("{:,}") \
         .pipe(custom_style)
 
-    st.dataframe(styled_df)
+    # 🚀 Fix: Use `st.write(styled_df)` instead of `st.dataframe()`
+    st.write(styled_df)
 
 else:
     st.warning("No data available to display.")
+
 
 
  
