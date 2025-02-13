@@ -10,7 +10,7 @@ import streamlit as st
 
 # Folder containing CSV files
 #folder_path = r"C:\\Users\\chris\\TLDz\\TLDz - Documents\\reg_word_analysis\\"
-folder_path = r"data"
+folder_path = "data"
 
 # Load all CSV files and combine them into a single DataFrame
 data = []
