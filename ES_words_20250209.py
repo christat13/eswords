@@ -61,15 +61,15 @@ def plot_word_popularity(word):
                       title=f'📊 Popularity of "{word}" Over Time', 
                       markers=True)
 
-        # 🔹 Add a dashed trend line (7-day moving average)
-        df_word['trend'] = df_word['count'].rolling(window=7, min_periods=1).mean()
+        # 🔹 Add a dashed trend line (7-month moving average)
+        df_word['trend'] = df_word['count'].rolling(window=12, min_periods=1).mean()
 
         fig.add_trace(
             go.Scatter(
                 x=df_word['date'], 
                 y=df_word['trend'], 
                 mode='lines', 
-                name="Trend (7-day Avg)", 
+                name="Trend (12-Month Avg)", 
                 line=dict(dash='dash', color='red', width=2)  # Dashed red line
             )
         )
