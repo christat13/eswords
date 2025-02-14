@@ -81,7 +81,7 @@ def plot_word_popularity(word):
         st.warning(f"❌ The word '{word}' was not found in the dataset.")
 
 # 🎨 Streamlit UI
-st.title("📊 Spanish Word Popularity Over Time")
+st.title("📊 Spanish Word Popularity ")
 
 word = st.text_input("🔍 Enter a word to view results:")
 
