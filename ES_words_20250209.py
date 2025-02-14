@@ -81,7 +81,7 @@ def plot_word_popularity(word):
         st.warning(f"❌ The word '{word}' was not found in the dataset.")
 
 # 🎨 Streamlit UI
-st.title("📊 Word Popularity Over Time")
+st.title("📊 Spanish Word Popularity Over Time")
 
 word = st.text_input("🔍 Enter a word to view results:")
 
@@ -94,7 +94,7 @@ if word:
 # -------------------------------------
 # Show a summary table
 if not df_all.empty:
-    st.subheader("📈 Most Popular Words Summary (Last 3 Months + Total)")
+    st.subheader("📈 Most Popular Words Summary (Last 4 Months + Total)")
 
     # 🛠️ Ensure 'date' column is in datetime format
     df_all["date"] = pd.to_datetime(df_all["date"], errors="coerce")
