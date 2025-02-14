@@ -136,7 +136,7 @@ if not df_all.empty:
         top_20_recent.style.format({
             "Total": "{:,}",  # Apply comma formatting to Total column
             **{col: "{:,}" for col in top_20_recent.columns if col not in ["word"]}
-        })
+        }),
         height=(len(top_20_recent) + 1) * 35  # Adjust row height dynamically
     )
 
