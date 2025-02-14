@@ -139,7 +139,7 @@ if not df_all.empty:
     st.dataframe(
         top_20_recent.style.format({
             "Total": "{:,}",  # Apply comma formatting
-            "Average": "{:,.2f}",  # Format average with two decimal places
+            "Average": "{:,.0f}",  # Format average with two decimal places
             **{col: "{:,}" for col in top_20_recent.columns if col not in ["word", "Average"]}
         }),
         height=(len(top_20_recent) + 1) * 35  # Adjust row height dynamically
