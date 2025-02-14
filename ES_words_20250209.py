@@ -117,11 +117,15 @@ if not df_all.empty:
         fill_value=0  # Fill missing months with 0 count
     )
 
-    # 🔢 Add a "Total" column summing **ALL MONTHS** from the full dataset
+    # Compute the monthly average count for each word
+    num_months = len(recent_counts.columns) - 1  # Exclude "Total" column
+    recent_counts["Average"] = recent_counts.iloc[:, :-1].sum(axis=1) / num_months  # Compute average over recent mon
+    
+    # Add a "Total" column summing **ALL MONTHS** from the full dataset
     total_counts = df_all.groupby("word")["count"].sum()
     recent_counts["Total"] = total_counts
 
-    # 🎯 Sort by the total count across all months
+    # Sort by the total count across all months
     recent_counts = recent_counts.sort_values(by="Total", ascending=False)
 
     # 📌 Show only the top 20 words
@@ -134,8 +138,9 @@ if not df_all.empty:
     # ✅ Apply formatting ONLY to numeric columns
     st.dataframe(
         top_20_recent.style.format({
-            "Total": "{:,}",  # Apply comma formatting to Total column
-            **{col: "{:,}" for col in top_20_recent.columns if col not in ["word"]}
+            "Total": "{:,}",  # Apply comma formatting
+            "Average": "{:,.2f}",  # Format average with two decimal places
+            **{col: "{:,}" for col in top_20_recent.columns if col not in ["word", "Average"]}
         }),
         height=(len(top_20_recent) + 1) * 35  # Adjust row height dynamically
     )
