@@ -3,9 +3,6 @@
 import os
 import pandas as pd
 import plotly.express as px
-import ipywidgets as widgets
-from IPython.display import display
-from ipywidgets import interact_manual
 import streamlit as st
 import plotly.graph_objects as go
 
